@@ -2,66 +2,107 @@
 
 using namespace std;
 
-class Pilha
+class no
+{
+    friend class pilha;
+    private:
+        int val;
+        no* proximo;
+    public:
+        no(int valor);
+};
+
+no::no(int valor)
+{
+    val = valor;
+    proximo = NULL;
+}
+
+class pilha
 {
     private:
-        int topo;
-        int elementos[5];
-    
+        no* topo;
+        unsigned tam;
     public:
+        pilha();
+        ~pilha();
+        unsigned tamanho();
+        void empilha (int valor);
+        int desempilha();
+        void limpaPilha();
+        bool vazia();
 
-        Pilha()
-        {
-            topo =- 1;
-        }
-
-        ~Pilha()
-        {
-            topo=-1;        
-        }
-
-        void push(int valor)
-        {
-            topo++;
-            elementos[topo]=valor;
-        }
-
-        int pop()
-        {
-            int val = elementos[topo];
-            topo--;
-            return val;
-        }
-
-        void verificarTopo()
-        {
-            cout<<elementos[topo]<<endl;
-        }
 };
+
+pilha:: pilha()
+{
+    topo = nullptr;
+    tam=0;
+}
+
+pilha::~pilha()
+{
+    limpaPilha();
+}
+
+void pilha::limpaPilha()
+{
+    while (!vazia())
+    {
+        desempilha();
+    }
+    
+}
+
+unsigned pilha:: tamanho()
+{
+    return tam;
+}
+
+void pilha:: empilha(int valor)
+{
+    no* novo = new no(valor);
+    novo->proximo = topo;
+    topo = novo;
+    tam++;
+}
+
+int pilha::desempilha()
+{
+    int valor = topo-> val;
+    no* temp = topo;
+    topo = topo->proximo;
+    delete temp;
+    tam--;
+
+    return valor;
+}
+
+bool pilha:: vazia()
+{
+    return (topo==NULL);
+}
 
 int main()
 {
-    Pilha pilha1;
+    pilha p1;
+    int num;
+    cin>>num;
 
-    int i=0;
-    int cont=0;
-    while (cont<5)
+    while (num>=0)  
     {
-        cout<<endl<<"Digite um valor para inserir na pilha"<<endl;
-        cin>>i;
-        pilha1.push(i);
-        cont++;
-        cout<<"Topo da pilha: ";
-        pilha1.verificarTopo(); 
+        p1.empilha(num);
+        cin>> num;
     }
+
+    cout<< p1.tamanho()<< endl;
+
+    while ( !p1.vazia() )
+    {
+        cout<<p1.desempilha()<<" ";
+    }
+    cout<<endl;
     
-
-    for (int i = 0; i < 5; i++)
-    {
-        cout<<pilha1.pop()<<" ";
-    }
-
-
-
+    
     return 0;
 }
