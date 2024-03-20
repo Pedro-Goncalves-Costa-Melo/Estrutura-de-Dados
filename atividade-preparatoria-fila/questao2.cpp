@@ -1,6 +1,6 @@
 /*
 {
-    /* Classe Fila encadeada
+     Classe Fila encadeada
  *
  * by Renato Ramos da Silva, 2023, Estruturas de Dados
  *
@@ -177,7 +177,9 @@ struct Dado {
 
 // Imprime as informações de um dado qualquer
 void imprimir_dado(const Dado& umDado) {
-    cout << "Você já implementou o método para imprimir dados???" << endl;
+
+    cout<<"Nome: " << umDado.nome <<" Premio: " << umDado.premio<< " Tipo: "<< umDado.tipo << 
+    " Tempo: "<< umDado.tempo <<endl;    
 }
 
 class Noh {
@@ -188,7 +190,7 @@ class Noh {
     public:
         Noh(Dado v) {
             mDado = v;
-            mProx = NULL;
+            mProx = nullptr;
         }        
 };
 
@@ -209,35 +211,67 @@ class Fila {
         inline void Primeiro();
         // Informa se a Fila está Vazia.
         inline bool Vazia();
+
+        void Topo();
     private:
         Noh* mPtPrimeiro;
         Noh* mPtrUltimo;
+        int tamanho;
 };
 
 Fila::Fila() 
-{   
+{
+    tamanho=0;
+    mPtrUltimo=nullptr;
+    mPtPrimeiro=nullptr;
 }
 
 Fila::~Fila() 
 {
+    LimparTudo();
 }
 
 Dado Fila::Desenfileirar()
 {
     if (this->Vazia()) throw runtime_error("Erro: Fila vazia!");
-    // completar com o código, caso não esteja vazia
+    
+    Dado dado = mPtPrimeiro->mDado;
+    Noh *aux = mPtPrimeiro;
+    mPtPrimeiro = mPtPrimeiro->mProx;
+    delete aux;
+
+    if (Vazia())
+        mPtrUltimo=nullptr;
+
+    return dado;
+    
 }
 
 void Fila::Enfileirar(const Dado& d) 
 {
-   
+    Noh* novo = new Noh(d);
+    if (Vazia())
+        mPtPrimeiro=novo;
+    else
+        mPtrUltimo->mProx = novo;
+
+    mPtrUltimo = novo;
+    tamanho++;
+
+}
+void Fila::Topo()
+{
+    if (this->Vazia()) throw runtime_error("Erro: fila vazia!");
+
+    cout<<"Nome: " << mPtPrimeiro->mDado.nome <<" Premio: " << mPtPrimeiro->mDado.premio<< " Tipo: "<< mPtPrimeiro->mDado.tipo << 
+    " Tempo: "<< mPtPrimeiro->mDado.tempo <<endl;    
 }
 
 void Fila::LimparTudo() 
 {
     while (!Vazia())
     {
-        /* code */
+        Desenfileirar();
     }
     
 }
@@ -250,9 +284,8 @@ void Fila::Primeiro()
 
 bool Fila::Vazia() 
 {
-
+    return (mPtPrimeiro==nullptr);
 }
-
 
 int main() 
 {
@@ -290,7 +323,7 @@ int main()
         }
     } while (comando != 'f'); // finalizar execução
     while (not fila.Vazia()) {
-        imprimir_dado(fila.DesemFilar());
+        imprimir_dado(fila.Desenfileirar());
     }
     cout << endl;
     return 0;
