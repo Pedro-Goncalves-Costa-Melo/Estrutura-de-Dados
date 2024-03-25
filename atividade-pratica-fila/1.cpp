@@ -179,7 +179,7 @@ struct Dado {
 void imprimir_dado(const Dado& umDado) {
 
     cout<<"Nome: " << umDado.nome <<" Premio: " << umDado.premio<< " Tipo: "<< umDado.tipo << 
-    " Tempo: "<< umDado.tempo <<endl;    
+    " tempo: "<< umDado.tempo <<endl;    
 }
 
 class Noh {
@@ -212,9 +212,11 @@ class Fila {
         // Informa se a Fila está Vazia.
         inline bool Vazia();
 
-        int daMoeda(int valor);
-
         void Topo();
+
+        int daMoeda(int tempo);
+
+
     private:
         Noh* mPtPrimeiro;
         Noh* mPtrUltimo;
@@ -244,6 +246,7 @@ Dado Fila::Desenfileirar()
 
     if (Vazia())
         mPtrUltimo=nullptr;
+
     tamanho--;
     return dado;
     
@@ -261,12 +264,50 @@ void Fila::Enfileirar(const Dado& d)
     tamanho++;
 
 }
+
+int Fila::daMoeda(int tempo)
+{
+    int retorno=0;
+    Noh *aux1 = mPtrUltimo;
+    Fila *filaAux = new Fila;
+    
+    while (aux1!=mPtPrimeiro)
+    {
+        Dado aux = Desenfileirar();
+
+        if (aux.tempo<tempo)
+        {
+            retorno += aux.premio;
+            Enfileirar(aux);
+        }
+        else
+            filaAux->Enfileirar(aux);
+    }
+
+    Dado aux = Desenfileirar();
+
+    if (aux.tempo<tempo)
+    {
+        retorno += aux.premio;
+        Enfileirar(aux);
+    }
+    else
+        filaAux->Enfileirar(aux);
+
+    while (!filaAux->Vazia())
+    {
+        Enfileirar(filaAux->Desenfileirar());
+    }
+    
+    return retorno;
+}
+
 void Fila::Topo()
 {
     if (this->Vazia()) throw runtime_error("Erro: fila vazia!");
 
     cout<<"Nome: " << mPtPrimeiro->mDado.nome <<" Premio: " << mPtPrimeiro->mDado.premio<< " Tipo: "<< mPtPrimeiro->mDado.tipo << 
-    " Tempo: "<< mPtPrimeiro->mDado.tempo <<endl;    
+    " tempo: "<< mPtPrimeiro->mDado.tempo <<endl;    
 }
 
 void Fila::LimparTudo() 
@@ -287,26 +328,6 @@ void Fila::Primeiro()
 bool Fila::Vazia() 
 {
     return (mPtPrimeiro==nullptr);
-}
-
-int Fila::daMoeda(int tempo)
-{
-    int retorno=0;
-    Noh *aux = mPtrUltimo;
-
-    while (aux!=mPtPrimeiro)
-    {
-        Dado aux = Desenfileirar();
-
-        if (aux.tempo<tempo)
-        {
-            retorno += aux.tempo;
-        }
-
-        Enfileirar(aux);
-    }
-
-    return retorno;
 }
 
 int main() 
@@ -340,8 +361,9 @@ int main()
                     break;
                 case 'p':
                     cin>>tempo;
-                    fila.daMoeda(tempo);
+                    cout<<fila.daMoeda(tempo)<<endl;
                     break;
+
                 default:
                     cerr << "comando inválido\n";
             }
