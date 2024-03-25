@@ -65,7 +65,11 @@ void Heap::imprime()
 void Heap::arruma()
 {
     for (int i = (tamanho/2-1); i >= 0; i--)
-        corrigeDescendo(i);   
+    {
+        corrigeDescendo(i);
+        imprime();
+    }
+           
 }
 
 int Heap::pai(int i)
@@ -91,12 +95,12 @@ void Heap::corrigeDescendo(int i)
     int dir = direita(i);
     int maior = i;
 
-    if (esq < tamanho && dados[esq] > dados[maior])
+    if (esq < tamanho && dados[esq] < dados[maior])
     {
         maior = esq;
     }
 
-    if (dir < tamanho && dados[dir] > dados[maior])
+    if (dir < tamanho && dados[dir] < dados[maior])
     {
         maior = dir;
     }
@@ -156,29 +160,16 @@ int Heap::espiaRaiz()
 
 int main()
 {
-    int tam = 13;
-    int vet[] = {50,2,90,20,230,43,8,34,66,100,110,3,13};
-
-    Heap *heap = new Heap (tam, vet);
-
+    int tam;
+    cin>>tam;
+    int vet[tam];
     for (int i = 0; i < tam; i++)
     {
-        cout<<heap->tiraRaiz()<< " : ";
-        heap->imprime();
-    }
-    cout<<endl;
-
-    for (int i = 0; i < tam; i++)
-    {
-        heap->insere(vet[i]);
+        cin>>vet[i];
     }
     
-    for (int i = 0; i < tam; i++)
-    {
-        cout<<heap->tiraRaiz()<< " : ";
-    }
-    cout<<endl;
+    Heap *heap = new Heap(tam, vet);
 
-    delete heap;
+    delete[] heap;
     return 0;
 }
