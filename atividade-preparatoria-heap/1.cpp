@@ -232,6 +232,7 @@ MaxHeap::MaxHeap(int cap)
 
 MaxHeap::~MaxHeap() 
 {
+    capacidade=0;
     delete[] heap;
 }
 
@@ -283,7 +284,7 @@ void MaxHeap::corrigeSubindo(int i)
         
 void MaxHeap::imprime() 
 {
-    if (tamanho==0)
+    if (tamanho <= 0)
     {
         cout<<"Heap vazia!"<<endl;
         return;
@@ -308,7 +309,7 @@ dado MaxHeap::retiraRaiz()
 
 void MaxHeap::insere(dado d)
 {
-    if (tamanho==capacidade)
+    if (tamanho >= capacidade)
     {
         cout<<"Erro ao inserir"<<endl;
         return;
@@ -338,7 +339,7 @@ int main()
                     meuHeap.insere(info);
                     break;
                 case 'r': // remover
-                    if (meuHeap.getTamanho()==0)
+                    if (meuHeap.getTamanho()<=0)
                         cerr <<"Erro ao retirar raiz" << endl;
                     else
                         cout << meuHeap.retiraRaiz().nomeTarefa << endl;
@@ -357,6 +358,5 @@ int main()
         }
     } while (comando != 'f'); // finalizar execução
     cout << endl;
-    meuHeap.~MaxHeap();
     return 0;
 }

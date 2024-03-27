@@ -1,3 +1,11 @@
+/*
+    MaxHeap, para alteração de prioridade
+    by joukim & bruno, 2019
+    alterado em 2023 by Renato
+    alterado em 2024 by Pedro Gonçalves
+*/
+
+#include <iostream>
 #include <utility> // para usar swap
 #include <stdexcept> // para usar exceção com runtime_error
 
@@ -61,7 +69,8 @@ MaxHeap::MaxHeap(int cap)
 
 MaxHeap::~MaxHeap() 
 {
-    delete heap;
+    capacidade=0;
+    delete[] heap;
 }
 
 int MaxHeap::pai(int i) 
@@ -112,7 +121,7 @@ void MaxHeap::corrigeSubindo(int i)
         
 void MaxHeap::imprime() 
 {
-    if (tamanho==0)
+    if (tamanho <= 0)
     {
         cout<<"Heap vazia!"<<endl;
         return;
@@ -137,7 +146,7 @@ dado MaxHeap::retiraRaiz()
 
 void MaxHeap::insere(dado d)
 {
-    if (tamanho==capacidade)
+    if (tamanho >= capacidade)
     {
         cout<<"Erro ao inserir"<<endl;
         return;
@@ -167,7 +176,7 @@ int main()
                     meuHeap.insere(info);
                     break;
                 case 'r': // remover
-                    if (meuHeap.getTamanho()==0)
+                    if (meuHeap.getTamanho()<=0)
                         cerr <<"Erro ao retirar raiz" << endl;
                     else
                         cout << meuHeap.retiraRaiz().nomeTarefa << endl;
@@ -186,6 +195,5 @@ int main()
         }
     } while (comando != 'f'); // finalizar execução
     cout << endl;
-    meuHeap.~MaxHeap();
     return 0;
 }
