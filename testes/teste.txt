@@ -1,10 +1,10 @@
 #include <iostream>
-#include <utility> // para usar swap
+#include <utility>   // para usar swap
 #include <stdexcept> // para usar exceção com runtime_error
 
 using namespace std;
 
-struct dado 
+struct dado
 {
     string nomeTarefa;
     char tipoTarefa;
@@ -13,26 +13,26 @@ struct dado
     int prioridade;
 };
 
-bool operator>(dado d1, dado d2) 
+bool operator>(dado d1, dado d2)
 {
     return d1.energiaGasta > d2.energiaGasta;
 }
 
-bool operator<(dado d1, dado d2) 
+bool operator<(dado d1, dado d2)
 {
     return d1.energiaGasta < d2.energiaGasta;
 }
 
-ostream& operator<<(ostream& output,const dado& d) 
+ostream &operator<<(ostream &output, const dado &d)
 {
-    output << "[" << d.nomeTarefa << "/" << d.tipoTarefa << "/" << d.energiaGasta << "/" << d.tempoEstimado << "/" << d.prioridade <<"]"; 
+    output << "[" << d.nomeTarefa << "/" << d.tipoTarefa << "/" << d.energiaGasta << "/" << d.tempoEstimado << "/" << d.prioridade << "]";
     return output;
 }
 
-class MaxHeap 
+class MaxHeap
 {
 private:
-    dado* heap;
+    dado *heap;
     int capacidade;
     int tamanho;
     inline int pai(int i);
@@ -40,118 +40,123 @@ private:
     inline int direito(int i);
     void corrigeDescendo(int i);
     void corrigeSubindo(int i);
+
 public:
     MaxHeap(int cap);
     ~MaxHeap();
     void imprime();
     dado retiraRaiz();
     void insere(dado d);
-    int getTamanho()
-    {
-        return tamanho;
-    }
-        
+    int getTamanho();
 };
 
-MaxHeap::MaxHeap(int cap) 
+MaxHeap::MaxHeap(int cap)
 {
-    capacidade=cap;
-    heap = new dado[capacidade];
-    tamanho=0;
+    capacidade = cap;
+    heap = new dado[cap];
+    tamanho = 0;
 }
 
-MaxHeap::~MaxHeap() 
+MaxHeap::~MaxHeap()
 {
-    capacidade=0;
+    capacidade = 0;
     delete[] heap;
 }
 
-int MaxHeap::pai(int i) 
+int MaxHeap::pai(int i)
 {
-    return ((i-1)/2);
+    return (i - 1) / 2;
 }
-    
-int MaxHeap::esquerdo(int i) 
+
+int MaxHeap::esquerdo(int i)
 {
-    return (i*2 + 1);
+    return 2 * i + 1;
 }
-    
-int MaxHeap::direito(int i) 
+
+int MaxHeap::direito(int i)
 {
-    return (i*2 + 2);
+    return 2 * i + 2;
 }
-    
-void MaxHeap::corrigeDescendo(int i) 
+
+void MaxHeap::corrigeDescendo(int i)
 {
     int esq = esquerdo(i);
     int dir = direito(i);
-    int max = i;
+    int maior = i;
 
-    if (esq < tamanho && heap[esq] > heap[max])
-        max = esq;
-
-    if (dir<tamanho && heap[dir] > heap[max])
-        max = dir;
-
-    if (max!=i)
+    if (esq < tamanho && heap[esq] > heap[maior])
     {
-        swap(heap[max], heap[i]);
-        corrigeDescendo(max);
-    }  
+        maior = esq;
+    }
+
+    if (dir < tamanho && heap[dir] > heap[maior])
+    {
+        maior = dir;
+    }
+
+    if (maior != i)
+    {
+        swap(heap[i], heap[maior]);
+        corrigeDescendo(maior);
+    }
 }
 
 void MaxHeap::corrigeSubindo(int i)
 {
     int p = pai(i);
 
-    if (heap[p] < heap[i])
+    if (heap[i] > heap[p])
     {
-        swap(heap[p], heap[i]);
+        swap(heap[i], heap[p]);
         corrigeSubindo(p);
     }
 }
 
-        
-void MaxHeap::imprime() 
+void MaxHeap::imprime()
 {
-    if (tamanho <= 0)
+    if (tamanho > 0)
     {
-        cout<<"Heap vazia!"<<endl;
-        return;
+        for (int i = 0; i < tamanho; i++)
+        {
+            cout << heap[i] << " ";
+        }
+        cout << endl;
     }
-    
-    for (int i=0; i<tamanho; i++) 
+    else
     {
-        cout << heap[i] << " ";
+        cout << "Heap vazia!" << endl;
     }
-    cout << endl;
 }
 
-dado MaxHeap::retiraRaiz() 
+dado MaxHeap::retiraRaiz()
 {
     dado aux = heap[0];
-    swap(heap[0], heap[tamanho-1]);
+    swap(heap[0], heap[tamanho - 1]);
     tamanho--;
     corrigeDescendo(0);
     return aux;
 }
 
-
 void MaxHeap::insere(dado d)
 {
-    if (tamanho >= capacidade)
+    if (tamanho == capacidade)
     {
-        cout<<"Erro ao inserir"<<endl;
-        return;
+        cout << "Erro ao inserir" << endl;
     }
-    
-    heap[tamanho] = d;
-    corrigeSubindo(tamanho);
-    tamanho++;
+    else
+    {
+        heap[tamanho] = d;
+        corrigeSubindo(tamanho);
+        tamanho++;
+    }
 }
 
+int MaxHeap::getTamanho()
+{
+    return tamanho;
+}
 
-int main() 
+int main()
 {
     int capacidade;
     dado info;
@@ -160,30 +165,39 @@ int main()
     cin >> capacidade;
     MaxHeap meuHeap(capacidade);
 
-    do {
-        try {
+    do
+    {
+        try
+        {
             cin >> comando;
-            switch (comando) {
-                case 'i': // inserir
-                    cin >> info.nomeTarefa >> info.tipoTarefa >> info.energiaGasta >> info.tempoEstimado >> info.prioridade;
-                    meuHeap.insere(info);
-                    break;
-                case 'r': // remover
-                    if (meuHeap.getTamanho()<=0)
-                        cerr <<"Erro ao retirar raiz" << endl;
-                    else
-                        cout << meuHeap.retiraRaiz().nomeTarefa << endl;
-                    break;
-                case 'p': // limpar tudo
-                    meuHeap.imprime();
-                    break;
-                case 'f': // finalizar
-                    // checado no do-while
-                    break;
-                default:
-                    cerr << "comando inválido\n";
+            switch (comando)
+            {
+            case 'i': // inserir
+                cin >> info.nomeTarefa >> info.tipoTarefa >> info.energiaGasta >> info.tempoEstimado >> info.prioridade;
+                meuHeap.insere(info);
+                break;
+            case 'r': // remover
+                if (meuHeap.getTamanho() > 0)
+                {
+                    cout << meuHeap.retiraRaiz().nomeTarefa << endl;
+                }
+                else
+                {
+                    cout << "Erro ao retirar raiz" << endl;
+                }
+                break;
+            case 'p': // limpar tudo
+                meuHeap.imprime();
+                break;
+            case 'f': // finalizar
+                // checado no do-while
+                break;
+            default:
+                cerr << "comando inválido\n";
             }
-        } catch (runtime_error& e) {
+        }
+        catch (runtime_error &e)
+        {
             cout << e.what() << endl;
         }
     } while (comando != 'f'); // finalizar execução
