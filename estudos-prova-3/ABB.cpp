@@ -70,11 +70,12 @@ noh* ABB::insereAux(noh* umNoh, int umValor)
         umNoh->filhoEsquerdo = insereAux(umNoh->filhoEsquerdo, umValor);
         return umNoh;
     }
-    else if (umValor >= umNoh->valor)
+    else 
     {
         umNoh->filhoDireito = insereAux(umNoh->filhoDireito, umValor);
         return umNoh;
-    }    
+    }
+    return umNoh;
 }
 
 void ABB::imprime()
@@ -82,6 +83,7 @@ void ABB::imprime()
     percoreEmOrdemAux(raiz, 0);
 }
 
-void ABB::percoreEmOrdemAux(noh* atual, int nivel)
+int main()
 {
+    return 0;
 }
