@@ -106,6 +106,8 @@ class AVL{
     int getAltura(noh* atual); // Retorna a altura de um nó
     objeto maximo(); // Retorna o objeto com a maior chave
     objeto minimo(); // Retorna o objeto com a menor chave
+    //int contarIntervalo(noh* atual, string chaveInicio, string chaveFim);
+
 };
 
 // Implementação do construtor da classe AVL
@@ -468,6 +470,25 @@ void AVL::realizarotacao(noh*& pai){
         }
     }
 }   
+/*
+ int AVL::contarIntervalo(noh* atual, string chaveInicio, string chaveFim)
+{
+    int cont = 0;
+
+    if (chaveInicio <= atual->elemento.getChave() && atual->elemento.getChave() <= chaveFim) {
+    {
+        cont++;
+    }
+    
+    if (chaveInicio)
+    {
+        
+    }
+    
+    
+    return cont;
+}
+*/
 
 int main() {
     AVL avl;

@@ -124,7 +124,8 @@ bool ABB::vazia(){
 // Insere um novo valor na árvore
 void ABB::inserir(int n){
     noh* novo = new noh(objeto(n)); // cria um novo nó com o valor fornecido
-    if(vazia()){
+    if (vazia())
+    {
         raiz = novo; // se a árvore estiver vazia, o novo nó se torna a raiz
     }
     else{
