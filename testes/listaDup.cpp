@@ -315,7 +315,7 @@ void listaDup::removeValor(Dado valor)
     if (vazia())    
     {
         primeiro=NULL;
-        ultimo=NULL;
+        ultimo=nullptr;
     }
 }
 

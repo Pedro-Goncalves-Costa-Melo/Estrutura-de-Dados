@@ -192,34 +192,125 @@ void listadup::insereNaPosicao(int posicao, acaoPrograma acao){
             aux->proximo = novo;
             novo->anterior = aux;
         }
-        
-        
+        tamanho++;
+    }
+    else
+    {
+        cerr<< "Posição Inexistente!"<<endl;
     }
     
 }
                    
 
-int listadup::procura(string valor) {
+int listadup::procura(string valor) 
+{
+    noh* aux = primeiro;
+    int posAux = 0;
+
+    while ((aux != nullptr) && aux->acao.nomeAcao != valor)
+    {
+        aux=aux->proximo;
+        posAux++;
+    }
+    
+    if (aux==nullptr)
+    {
+        posAux=-1;
+    }
+
+    return posAux;
+    
 
 }
 
 // método básico que *percorre* uma lista, imprimindo seus elementos
-void listadup::imprime() {
-   
+void listadup::imprime() 
+{
+    if (vazia())
+    {
+        cerr<<"Lista vazia!"<<endl;
+    }
+    else
+    {
+        noh* aux = primeiro;
+        while (aux!=nullptr)
+        {
+            cout<<"(" << aux->acao.identificador <<", "<< aux->acao.nomeAcao <<", "<< aux->acao.tempoExecucao <<", "<< aux->acao.tempoConsumido <<")" <<endl;
+
+            aux=aux->proximo;
+        }
+        
+        cout<<" IMPRIMINDO REVERSO "<<endl;
+
+        aux=ultimo;
+        while (aux!=nullptr)
+        {
+            cout<<"(" << aux->acao.identificador <<", "<< aux->acao.nomeAcao <<", "<< aux->acao.tempoExecucao <<", "<< aux->acao.tempoConsumido <<")" <<endl;
+
+            aux = aux->anterior;
+        }
+    }
 }
 
 // verifica se a lista está vazia
-inline bool listadup::vazia() {
-
+inline bool listadup::vazia() 
+{
+    return (tamanho==0);
 }
 
-void listadup::removeNoInicio() {
+void listadup::removeNoInicio() 
+{
+    if (vazia())
+    {
+        cerr<<"Remoção em lista vazia!"<<endl;
+    }
+    else
+    {
+        noh* aux = primeiro;
+        primeiro = primeiro->proximo;
+        if (primeiro != nullptr)
+        {
+            primeiro->anterior = nullptr;
+        }
+        
+        delete aux;
 
+        tamanho--;
+        if (vazia())
+        {
+            primeiro=nullptr;
+            ultimo=nullptr;
+        }
+        
+    }
+    
 }
 
 
-void listadup::removeNoFim() {
+void listadup::removeNoFim() 
+{
+    if (vazia())
+    {
+        cerr<<"Remoção em lista vazia!"<<endl;
+    }
+    else
+    {
+        noh* aux = ultimo;
+        ultimo=ultimo->anterior;
+        if (ultimo!=nullptr)
+        {
+            ultimo->proximo=nullptr;
+        }
+        delete aux;
 
+        tamanho--;
+        if (vazia())
+        {
+            primeiro=nullptr;
+            ultimo=nullptr;
+        }
+        
+    }
 }
 
 
@@ -249,11 +340,19 @@ int main() {
                     break;             
                 case 's': // procurar
                     cin >> nomeEquipe;
-                    posicao = minhaLista.procura(nomeEquipe);
-                    if(posicao == -1)
-                        cout << "Nao encontrado"<< endl;
+                    if (minhaLista.vazia())
+                    {
+                        cerr<<"Lista vazia!"<<endl;
+                    }
                     else
-                        cout << posicao << endl;
+                    {
+                        posicao = minhaLista.procura(nomeEquipe);
+                        if(posicao == -1)
+                            cout << "Nao encontrado"<< endl;
+                        else
+                            cout << posicao << endl;
+                    }
+                    
                     break;                    
                 case 'r': // remover
                     minhaLista.removeNoInicio();
